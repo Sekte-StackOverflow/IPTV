@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ActualTheme" parent="Theme.MaterialComponents.DayNight">
+    <style name="ActualTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/myPrimary</item>
         <item name="colorPrimaryDark">@color/mySecondary</item>
         <item name="colorAccent">@color/colorAccent</item>

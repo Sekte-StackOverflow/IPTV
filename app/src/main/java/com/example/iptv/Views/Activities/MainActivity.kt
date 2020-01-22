@@ -2,10 +2,13 @@ package com.example.iptv.Views.Activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.iptv.R
 import com.example.iptv.Views.Adapters.PagerAdapter
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
