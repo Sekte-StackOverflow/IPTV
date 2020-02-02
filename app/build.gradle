@@ -41,7 +41,18 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.2.0-alpha03'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "com.mikepenz:materialdrawer-nav:7.0.0"
+    implementation 'com.mikhaellopez:circularimageview:4.1.1'
+
+    implementation 'com.synnapps:carouselview:0.1.5'
+
+
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'com.lucasurbas:guidelinescompattoolbar:1.0.0'
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.3'
+    implementation 'com.mikepenz:fontawesome-typeface:5.9.0.0-kotlin@aar'
 
     implementation 'com.squareup.retrofit2:retrofit:2.7.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.7.0'
@@ -49,4 +60,5 @@ dependencies {
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.1'
+    implementation 'com.google.android.exoplayer:extension-okhttp:2.11.1'
 }

@@ -1,9 +1,19 @@
 <resources>
-    <string name="app_name">IPTV</string>
+    <string name="app_name">eyePLUS</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_home">HomeActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="masukkan_nomer_ponsel">Masukkan Nomer Ponsel</string>
+    <string name="pemberitahuan">Saya ingin menerima pemberitahuan dari EyePlus tentang promosi dan informasi eksklusif lainnya</string>
+    <string name="kebijakan">
+        Dengan mendaftar saya setuju kepada syarat dan ketentuan EyePlus. <u>Syarat dan ketentuan yang berlaku dan kebijakan privasi.</u>
+    </string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="txt_copyright">\@2020 by EyePlus All Right Reserved</string>
+    <string name="forget">I forgot my password</string>
+    <string name="agreement">I agree to the <b>terms</b></string>
 </resources>

@@ -11,12 +11,12 @@ import com.squareup.picasso.Picasso
 class MoviesAdapters(data: MutableList<Channel>?) :
     BaseQuickAdapter<Channel, BaseViewHolder>(R.layout.movie_item, data) {
     override fun convert(helper: BaseViewHolder, item: Channel?) {
-        val watcher: Int = 2100
-        val poster: ImageView = helper.getView(R.id.movie_poster)
+        val poster: ImageView = helper.getView(R.id.movie_image)
         Picasso.get()
             .load(Uri.parse(item?.imageUrl))
             .into(poster)
         helper.setText(R.id.movie_title, item?.name)
-            .setText(R.id.number_watching, "$watcher Watching")
+            .setText(R.id.movie_views, "${item!!.views} Watching")
+            .setText(R.id.movie_status, item.status)
     }
 }

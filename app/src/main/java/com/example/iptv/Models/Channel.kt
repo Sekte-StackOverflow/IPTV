@@ -1,7 +1,6 @@
 package com.example.iptv.Models
 
 data class Channel(val name: String,
-                   val Url: String,
+                   val views: String,
                    val imageUrl: String,
-                   val mResolution: String,
-                   val description: String)
+                   val status: String)
