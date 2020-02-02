@@ -46,6 +46,12 @@ class MainActivity : AppCompatActivity(), TabLayout.OnTabSelectedListener {
         tabs.addOnTabSelectedListener(this)
     }
 
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(main_activity_container.id, fragment)
+            .commit()
+    }
+
     override fun onTabReselected(tab: TabLayout.Tab) {
         view_pager.currentItem = tab.position
     }
