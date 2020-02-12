@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
     android:layoutDirection="ltr"
-    android:background="#11000000">
+    android:background="@color/black_overlay">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="334dp" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <TextView
         android:id="@+id/textView2"
@@ -56,10 +56,10 @@
         app:layout_constraintTop_toBottomOf="@+id/about_appVersion" />
 
     <Button
-        android:id="@+id/about_back_btn"
+        android:id="@+id/about_checkUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Home"
+        android:text="check for Update"
         android:layout_marginTop="@dimen/dp_40"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

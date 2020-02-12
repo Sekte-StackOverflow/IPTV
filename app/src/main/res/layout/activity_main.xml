@@ -18,8 +18,9 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/mToolbar"
-            app:navigationIcon="@drawable/ic_dehaze_black_24dp"
-            style="@style/MaterialDrawerTheme.Light.DarkToolbar.ActionBar.TranslucentStatus"
+            app:navigationIcon="@drawable/ic_dehaze_black_32dp"
+            app:logo="@drawable/logo_white_45"
+            android:background="@color/tab_brown"
             android:layout_width="match_parent"
             android:layout_height="@android:dimen/app_icon_size"
             android:minHeight="@dimen/def_height"/>
@@ -28,9 +29,11 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="38dp"
-            app:tabBackground="@color/l_dark"
+            app:tabBackground="@color/tab_lg_brown"
             app:tabIconTint="@color/white"
-            app:tabIndicatorColor="@color/mid_dark"
+            app:tabIndicator="@drawable/tab"
+            app:tabIndicatorColor="@color/tab_brown"
+            app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="@dimen/def_height"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.fragment_product_detail.*
  * A simple [Fragment] subclass.
  */
 class AboutFragment : Fragment() {
+    private val NO_UPDATE = "No Update Available"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,8 +33,8 @@ class AboutFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         about_appVersion.text = "v ${BuildConfig.VERSION_NAME}"
-        about_back_btn.setOnClickListener {
-
+        about_checkUpdate.setOnClickListener {
+            Toast.makeText(context, NO_UPDATE, Toast.LENGTH_SHORT).show()
         }
     }
 

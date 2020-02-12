@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.text.isDigitsOnly
 
 import com.example.iptv.R
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -58,26 +59,36 @@ class LoginFragment : Fragment() {
             }
 
             if (emailValidation && passValidation) {
-
                 // example
-                if (login_email_phone.text!!.equals("Rifaul@gmail.com")
-                    && login_password.text!!.equals("12345678")) {
-                    Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT).show()
+                if (isNumeric(login_email_phone.text.toString())) {
+                    if (login_email_phone.text!!.equals("08123456789")
+                        && login_password.text!!.equals("12345678")) {
+                        Toast.makeText(context, "Login Success Phone", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
-                    Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
+                    if (login_email_phone.text!!.equals("Rifaul@gmail.com")
+                        && login_password.text!!.equals("12345678")) {
+                        Toast.makeText(context, "Login Success email", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
+                    }
                 }
+
             }
         }
 
         login_forgetPass.setOnClickListener{
-            Toast.makeText(requireContext(), "Forget Button Pressed!", Toast.LENGTH_SHORT).show()
+            listener!!.forgetPassword()
         }
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
+    fun isNumeric(str: String): Boolean {
+        return str.isDigitsOnly()
     }
+
+    // TODO: Rename method, update argument and hook method into UI event
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -106,7 +117,8 @@ class LoginFragment : Fragment() {
      */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
+        fun forgetPassword()
+        fun isLogin()
     }
 
 }

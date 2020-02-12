@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle"
+    android:innerRadius="0dp"
+    android:opticalInsetRight="3dp"
+    android:opticalInsetLeft="3dp"
+    android:useLevel="false"
+    android:thickness="0dp">
+    <solid android:color="@color/tab_brown"/>
+
+</shape>

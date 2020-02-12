@@ -11,8 +11,8 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         app:cardCornerRadius="@dimen/cardview_default_radius"
         app:cardElevation="@dimen/cardview_default_elevation"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,9 +33,21 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/dp_10"
                 android:text="SIGN IN"
+                android:fontFamily="@font/montserrat_bold"
                 android:textColor="@color/l_dark"
-                android:textSize="28dp"
-                android:textStyle="bold" />
+                android:textSize="18dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="130dp">
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:layout_gravity="center"
+                    android:id="@+id/login_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp_4"
+                    android:src="@drawable/ic_account_circle_black_24dp" />
+            </FrameLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/login_emailLayout"
@@ -75,31 +87,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="@dimen/dp_4"
                 android:orientation="horizontal">
-
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="@dimen/dp_10">
-
                     <TextView
                         android:id="@+id/login_forgetPass"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="start|center"
+                        android:layout_gravity="end|center"
                         android:clickable="true"
                         android:text="@string/forget"
                         android:textColor="@color/black" />
-
-                    <Button
-                        android:id="@+id/login_btn"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:text="Sign In" />
                 </FrameLayout>
             </LinearLayout>
+            <Button
+                android:id="@+id/login_btn"
+                android:padding="@dimen/dp_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign In" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

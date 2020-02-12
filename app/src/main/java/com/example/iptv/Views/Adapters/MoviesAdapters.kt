@@ -12,11 +12,12 @@ class MoviesAdapters(data: MutableList<Channel>?) :
     BaseQuickAdapter<Channel, BaseViewHolder>(R.layout.movie_item, data) {
     override fun convert(helper: BaseViewHolder, item: Channel?) {
         val poster: ImageView = helper.getView(R.id.movie_image)
+        val url = "https://alvaindopratama.com/admin-eyeplus/media/img/${item?.imageUrl}"
         Picasso.get()
-            .load(Uri.parse(item?.imageUrl))
+            .load(Uri.parse(url))
             .into(poster)
         helper.setText(R.id.movie_title, item?.name)
             .setText(R.id.movie_views, "${item!!.views} Watching")
-            .setText(R.id.movie_status, item.status)
+            .setText(R.id.movie_status, item.status.toUpperCase())
     }
 }

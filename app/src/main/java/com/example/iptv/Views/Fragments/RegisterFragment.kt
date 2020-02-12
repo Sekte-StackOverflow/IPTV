@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.iptv.R
+import kotlinx.android.synthetic.main.fragment_register.*
 
 /**
  * A simple [Fragment] subclass.
@@ -25,6 +26,14 @@ class RegisterFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (!activity?.intent?.getStringExtra("NOHP_EMAIL").isNullOrEmpty()) {
+            val data = activity?.intent?.getStringExtra("NOHP_EMAIL")
+            reg_phone_email.setText(data)
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

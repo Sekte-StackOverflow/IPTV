@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/black_overlay"
+    android:keepScreenOn="true"
     tools:context=".Views.Activities.FullscreenActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
@@ -14,8 +15,7 @@
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/fs_player"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:resize_mode="fill"/>
+        android:layout_height="match_parent" />
 
     <ProgressBar
         android:id="@+id/fs_loading"

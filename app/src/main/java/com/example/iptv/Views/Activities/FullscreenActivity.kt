@@ -1,6 +1,7 @@
 package com.example.iptv.Views.Activities
 
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -9,6 +10,7 @@ import com.example.iptv.R
 import com.example.iptv.Views.Adapters.PlayerAdapters
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout
 import kotlinx.android.synthetic.main.activity_fullscreen.*
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 
@@ -20,6 +22,8 @@ class FullscreenActivity : AppCompatActivity(), Player.EventListener {
 
     private lateinit var simpleExoPlayer: SimpleExoPlayer
     private lateinit var mPlayer: PlayerAdapters
+    private lateinit var vidUrl: String
+
     private val mHideHandler = Handler()
     private val mHidePart2Runnable = Runnable {
         // Delayed removal of status and navigation bar
@@ -66,6 +70,7 @@ class FullscreenActivity : AppCompatActivity(), Player.EventListener {
         fs_player.setOnClickListener { toggle() }
 
         val hlsUrl = intent.getStringExtra("videoUrl")
+        vidUrl = hlsUrl
         val ps = intent.getLongExtra("playbackPosition", 0L)
 
         exo_fullscreen_icon.setImageDrawable(getDrawable(R.drawable.ic_fullscreen_exit_24dp))
@@ -78,12 +83,7 @@ class FullscreenActivity : AppCompatActivity(), Player.EventListener {
         simpleExoPlayer.addListener(this)
 
         exo_fullscreen_button.setOnClickListener{
-            val intent = Intent(this@FullscreenActivity, MainActivity::class.java)
-            val postion = simpleExoPlayer.currentPosition
-            intent.putExtra("playbackPosition", postion)
-            simpleExoPlayer.stop()
-            startActivity(intent)
-            simpleExoPlayer.release()
+            normalScreen()
         }
 
 
@@ -91,6 +91,27 @@ class FullscreenActivity : AppCompatActivity(), Player.EventListener {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
+    }
+
+    private fun normalScreen() {
+        val intent = Intent(this@FullscreenActivity, MainActivity::class.java)
+        val postion = simpleExoPlayer.currentPosition
+        intent.putExtra("playbackPosition", postion)
+        intent.putExtra("resVidUri", vidUrl)
+        simpleExoPlayer.stop()
+        startActivity(intent)
+        simpleExoPlayer.release()
+        finish()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            fs_player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FILL
+        } else {
+//            fs_player.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
+            normalScreen()
+        }
     }
 
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
