@@ -16,4 +16,5 @@
     <string name="txt_copyright">\@2020 by EyePlus All Right Reserved</string>
     <string name="forget">I forgot my password</string>
     <string name="agreement">I agree to the <b>terms</b></string>
+    <string name="descipt_txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</string>
 </resources>

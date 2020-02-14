@@ -2,4 +2,5 @@
 <resources>
     <string name="masukkan_nomer_ponsel">Masukkan Nomer Ponsel</string>
     <string name="pemberitahuan">saya ingin</string>
+    <string name="descipt_txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</string>
 </resources>
