@@ -1,6 +1,7 @@
 package com.example.iptv.Views.Fragments
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.text.isDigitsOnly
+import com.example.iptv.Models.User
 
 import com.example.iptv.R
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -60,27 +62,23 @@ class LoginFragment : Fragment() {
 
             if (emailValidation && passValidation) {
                 // example
-                if (isNumeric(login_email_phone.text.toString())) {
-                    if (login_email_phone.text!!.equals("08123456789")
-                        && login_password.text!!.equals("12345678")) {
-                        Toast.makeText(context, "Login Success Phone", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
-                    }
+                if (login_email_phone.text.toString().contains("@")) {
+                    val username = login_email_phone.text.toString()
+                    val pass = login_password.text.toString()
+                    listener!!.login(username, pass, "email")
+//                    Toast.makeText(context, "Login Success Email", Toast.LENGTH_SHORT).show()
                 } else {
-                    if (login_email_phone.text!!.equals("Rifaul@gmail.com")
-                        && login_password.text!!.equals("12345678")) {
-                        Toast.makeText(context, "Login Success email", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
-                    }
+                    val username = login_email_phone.text.toString()
+                    val pass = login_password.text.toString()
+                    listener!!.login(username, pass, "phone")
+//                    Toast.makeText(context, "Login Success Phone", Toast.LENGTH_SHORT).show()
                 }
 
             }
         }
 
         login_forgetPass.setOnClickListener{
-            listener!!.forgetPassword()
+            startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://eyeplus.co.id/password/reset")))
         }
     }
 
@@ -117,8 +115,8 @@ class LoginFragment : Fragment() {
      */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun forgetPassword()
         fun isLogin()
+        fun login(username: String, password: String, type: String)
     }
 
 }

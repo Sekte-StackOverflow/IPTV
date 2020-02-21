@@ -5,8 +5,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class APIClient {
     private lateinit var retrofit: Retrofit
-    private var BASE_URL: String = "https://alvaindopratama.com/admin-eyeplus/"
+    private var BASE_URL: String = "https://eyeplus.co.id/admin-eyeplus/"
     private var PUBLIC_IP_URL: String = "https://api.ipify.org/"
+
+    companion object {
+        val IMAGE_PATH = "https://eyeplus.co.id/admin-eyeplus/media/img/"
+    }
 
     fun getIPPublicInstance(): Retrofit {
         retrofit = Retrofit.Builder()

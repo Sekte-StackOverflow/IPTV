@@ -48,8 +48,11 @@ class SocialMediaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sosMedViewModel.init()
+//        sosMedViewModel.getSocialMedia().observe(this, Observer {
+//            t -> showSocial(getDataDummy(t[0]))
+//        })
         sosMedViewModel.getSocialMedia().observe(this, Observer {
-            t -> showSocial(getDataDummy(t[0]))
+            socialMedia -> showSocial(socialMedia)
         })
     }
     private fun showSocial(mutableList: MutableList<SocialMedia>) {
@@ -68,58 +71,4 @@ class SocialMediaFragment : Fragment() {
         rv_sosmed.layoutManager = GridLayoutManager(requireContext(), 2)
         rv_sosmed.Recycler()
     }
-
-    fun getDataDummy(sosmedLink: SosMed): MutableList<SocialMedia> {
-        val data: MutableList<SocialMedia> = mutableListOf()
-        data.add(
-            SocialMedia(
-                "Youtube",
-                "https://www.egedeniztextile.com/wp-content/uploads/2017/09/Youtube-logo-2017-480x480.png",
-                sosmedLink.youtube
-            )
-        )
-
-        data.add(
-            SocialMedia(
-                "Instagram",
-                "https://img.freepik.com/free-vector/instagram-logo_1199-122.jpg?size=338&ext=jpg&ve=1",
-                sosmedLink.instagram
-            )
-        )
-
-        data.add(
-            SocialMedia(
-                "Facebook",
-                "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmarketexclusive.com%2Fwp-content%2Fuploads%2F2016%2F11%2FFacebook-Inc-1.jpg&f=1&nofb=1",
-                sosmedLink.facebook
-            )
-        )
-
-        data.add(
-            SocialMedia(
-                "Twitter",
-                "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fseeklogo.net%2Fwp-content%2Fuploads%2F2016%2F11%2Ftwitter-icon-circle-blue-logo-preview-400x400.png&f=1&nofb=1",
-                sosmedLink.twitter
-            )
-        )
-
-        data.add(
-            SocialMedia(
-                "Pinterest",
-                "https://www.mpa-pro.fr/resize/360x360/zc/3/f/0/src/sites/mpapro/files/products/d11458.png",
-                sosmedLink.pinterest
-            )
-        )
-
-        data.add(
-            SocialMedia(
-                "LinkedIn",
-                "https://www.shareicon.net/data/2015/08/29/92755_linkedin_606x606.png",
-                sosmedLink.linkedin
-            )
-        )
-        return data
-    }
-
-
 }

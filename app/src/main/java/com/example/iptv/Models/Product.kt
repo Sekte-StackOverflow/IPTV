@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName
 
 class Product(
 
+    @SerializedName("id")
+    val id: String?,
     @SerializedName("nama")
     val name: String?,
     @SerializedName("thumnail")
@@ -24,12 +26,13 @@ class Product(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readInt()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(id)
         parcel.writeString(name)
         parcel.writeString(image)
         parcel.writeString(detail)

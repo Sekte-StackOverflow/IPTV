@@ -72,8 +72,10 @@ class FullscreenActivity : AppCompatActivity(), Player.EventListener {
         val hlsUrl = intent.getStringExtra("videoUrl")
         vidUrl = hlsUrl
         val ps = intent.getLongExtra("playbackPosition", 0L)
+        val status = intent.getStringExtra("status")
+        modeVideo(status)
 
-        exo_fullscreen_icon.setImageDrawable(getDrawable(R.drawable.ic_fullscreen_exit_24dp))
+//        exo_fullscreen_icon.setImageDrawable(getDrawable(R.drawable.ic_fullscreen_exit_24dp))
 
         mPlayer = PlayerAdapters(applicationContext, hlsUrl)
         simpleExoPlayer = mPlayer.initExoPlayer()
@@ -82,15 +84,25 @@ class FullscreenActivity : AppCompatActivity(), Player.EventListener {
         simpleExoPlayer.playWhenReady = true
         simpleExoPlayer.addListener(this)
 
-        exo_fullscreen_button.setOnClickListener{
-            normalScreen()
-        }
+//        exo_fullscreen_button.setOnClickListener{
+//            normalScreen()
+//        }
 
 
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
+    }
+    private fun modeVideo(status: String) {
+        if (status.toLowerCase().contains("live")) {
+            exo_modeVideo.visibility = View.VISIBLE
+            exo_seek_bar.visibility = View.INVISIBLE
+        } else {
+            exo_modeVideo.visibility = View.GONE
+            exo_seek_bar.visibility = View.VISIBLE
+        }
+
     }
 
     private fun normalScreen() {
@@ -137,7 +149,7 @@ class FullscreenActivity : AppCompatActivity(), Player.EventListener {
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-        delayedHide(100)
+        delayedHide(10)
     }
 
     private fun toggle() {

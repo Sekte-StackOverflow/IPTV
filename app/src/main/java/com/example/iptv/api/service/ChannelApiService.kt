@@ -7,10 +7,10 @@ import retrofit2.http.Path
 
 interface ChannelApiService {
 
-    @GET("film/json")
+    @GET("api/film/json")
     fun getChannels(): Call<MutableList<Channel>>
 
-    @GET("film/json/{id}")
+    @GET("api/film/json/{id}")
     fun getOneChanner(@Path("id") id : String): Call<Channel>
 
 }

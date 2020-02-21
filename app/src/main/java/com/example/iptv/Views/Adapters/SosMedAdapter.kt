@@ -5,6 +5,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.iptv.Models.SocialMedia
 import com.example.iptv.R
+import com.example.iptv.api.APIClient
 import com.mikhaellopez.circularimageview.CircularImageView
 import com.squareup.picasso.Picasso
 
@@ -18,7 +19,7 @@ class SosMedAdapter(data: MutableList<SocialMedia>)
             borderColor = Color.WHITE
         }
         Picasso.get()
-            .load(item!!.icon)
+            .load(APIClient.IMAGE_PATH + item!!.icon)
             .into(cirImg)
         helper.setText(R.id.sosmed_name, item.name)
     }

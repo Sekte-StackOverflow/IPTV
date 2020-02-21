@@ -1,3 +1,10 @@
 package com.example.iptv.Models
 
-data class Banner(val type: String, val img: String)
+import com.google.gson.annotations.SerializedName
+
+data class Banner(
+    @SerializedName("tipe")
+    val type: String,
+    @SerializedName("android")
+    val img: String
+)

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/l_dark"
+    android:background="@drawable/background___blue"
     tools:context=".Views.Fragments.ChangePassFragment">
 
     <com.google.android.material.card.MaterialCardView
@@ -33,20 +33,7 @@
                 android:layout_height="wrap_content"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/dp_4"
-                android:paddingBottom="@dimen/dp_4"
-                android:hint="Fullname"
-                app:hintEnabled="true"
-                app:hintAnimationEnabled="true">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/change_pass_fullname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/dp_4"
@@ -57,12 +44,14 @@
                 app:endIconDrawable="@drawable/ic_email_black_24dp"
                 android:hint="Email">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/change_pass_email"
+                    android:id="@+id/change_pass_Email"
+                    android:inputType="text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/dp_4"
@@ -78,6 +67,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="New Password"
@@ -93,6 +83,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Repeat Password"
@@ -110,7 +101,7 @@
             <Button
                 android:layout_gravity="end"
                 android:id="@+id/change_pass_btnSend"
-                android:text="Send"
+                android:text="Save"
                 android:layout_margin="@dimen/dp_10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

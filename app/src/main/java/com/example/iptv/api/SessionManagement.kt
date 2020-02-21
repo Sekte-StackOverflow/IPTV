@@ -21,10 +21,10 @@ class SessionManagement {
     private var KEY_PHONE = "myPhone"
 
     companion object {
-        fun newInstance(context: Context) = SessionManagement().init(context)
+        fun newInstance() = SessionManagement()
     }
 
-    private fun init(context: Context) {
+    fun init(context: Context) {
         mContext = context
         pref = mContext.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
         editor = pref.edit()
@@ -49,22 +49,21 @@ class SessionManagement {
         }
     }
 
-    // get Stored Session data
+//     get Stored Session data
     fun getUserDetail(): User {
         val user = User(
-            pref.getString(KEY_EMAIL, null)!!,
-            pref.getString(KEY_PHONE, null)!!,
+            pref.getString(KEY_EMAIL, "")!!,
+            pref.getString(KEY_PHONE, "")!!,
             ""
         )
         return user
     }
 
-    //clear session
+//    clear session
     fun logoutUser(){
         editor.clear()
         editor.commit()
     }
-
 
     fun isLoggedIn(): Boolean {
         return pref.getBoolean(IS_LOGIN, false)

@@ -6,13 +6,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.iptv.Models.Channel
 import com.example.iptv.R
+import com.example.iptv.api.APIClient
 import com.squareup.picasso.Picasso
 
 class MoviesAdapters(data: MutableList<Channel>?) :
     BaseQuickAdapter<Channel, BaseViewHolder>(R.layout.movie_item, data) {
     override fun convert(helper: BaseViewHolder, item: Channel?) {
         val poster: ImageView = helper.getView(R.id.movie_image)
-        val url = "https://alvaindopratama.com/admin-eyeplus/media/img/${item?.imageUrl}"
+        val url = APIClient.IMAGE_PATH + item!!.imageUrl
         Picasso.get()
             .load(Uri.parse(url))
             .into(poster)

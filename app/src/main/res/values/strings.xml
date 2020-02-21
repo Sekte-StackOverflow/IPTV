@@ -17,4 +17,28 @@
     <string name="forget">I forgot my password</string>
     <string name="agreement">I agree to the <b>terms</b></string>
     <string name="descipt_txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</string>
+    <string name="policy_txt">
+        <b>KEBIJAKAN PRIVASI</b>\n
+        Dalam membantu Anda, kami menyediakan produk dan layanan dengan kualitas terbaik. Kami menggunakan informasi dari interaksi kami dengan Anda dan pelanggan lainnya, serta dari pihak lain. Karena kami menghormati privasi Anda, kami telah menerapkan prosedur untuk memastikan informasi pribadi Anda ditangani dengan aman dan bertanggung jawab.
+        Kami telah memposting kebijakan privasi ini untuk menjelaskan praktik pengumpulan informasi kami dan pilihan yang Anda miliki tentang cara pengumpulan dan penggunaan informasi.
+        Seiring waktu kami akan terus mengembangkan situs web kami dan memanfaatkan kemajuan teknologi untuk memperbaiki layanan yang kami tawarkan, kebijakan privasi ini kemungkinan akan berubah. Oleh karena itu kami mendorong Anda untuk mengacu pada kebijakan ini secara berkelanjutan sehingga Anda memahami kebijakan privasi kami saat ini.
+        \n<b>KEAMANAN</b>\n
+        Informasi pribadi yang diberikan di situs web dan transaksi kartu kredit online dikirimkan melalui server yang aman. Kami berkomitmen untuk menangani informasi pribadi Anda dengan standar keamanan informasi yang tinggi. Kami mengambil langkah fisik, elektronik, dan administratif yang sesuai untuk menjaga keamanan dan keakuratan informasi identitas pribadi yang kami kumpulkan, termasuk membatasi jumlah orang yang memiliki akses fisik ke server database kami, serta menggunakan sistem keamanan elektronik dan perlindungan kata kunci untuk menghindari data pribadi Anda jatuh ketangan yang tidak bertanggung jawab. Spam, Spyware, atau virus tidak diperbolehkan dalam situs. Harap mengatur dan menjaga preferensi komunikasi Anda sehingga kami dapat mengirimkan komunikasi seperti yang Anda
+        inginkan. Anda tidak boleh mengirim pesan yang mengandung spam, spyware atau virus kedalam situs. Situs kami menggunakan teknologi enkripsi, seperti Secure Sockets Layer (SSL), untuk melindungi informasi pribadi Anda selama pengiriman data. SSL mengenkripsi informasi pemesanan seperti nama, alamat, dan nomor kartu kredit Anda. Pusat dan toko Customer Care kami juga beroperasi melalui jaringan pribadi yang aman. Harap dicatat bahwa email tidak dienkripsi dan tidak dianggap sebagai cara yang aman untuk mentransmisikan informasi kartu kredit. Jika Anda ingin melaporkan pesan yang mencurigakan, silahkan hubungi kami di 021-2991 6282.
+        \n<b>INFORMASI YANG KAMI KUMPULKAN</b>\n
+        Umumnya, Anda dapat menelusuri situs web tanpa memberikan informasi identitas pribadi. Namun, kami mungkin meminta Anda untuk memberikan informasi identitas pribadi di berbagai tempat dan waktu di situs ini. Dalam beberapa kasus, jika Anda memilih untuk tidak memberikan informasi yang diminta kepada kami, Anda mungkin tidak dapat mengakses semua bagian situs ini atau berpartisipasi dalam semua fitur-fiturnya. Kami menerima dan menyimpan informasi identitas pribadi yang Anda masukkan di situs kami kapan pun Anda berbelanja di Lejel.com baik menggunakan website ataupun Aplikasi Mobile. Kami akan mengumpulkan informasi identitas pribadi Anda untuk mempermudah proses pemesanan ataupun pembayaran yang tersedia di situs kami. Data informasi pribadi yang kami kumpulkan dari Anda sebagai berikut: Nama, Alamat, Nomor telepon dan alamat email Anda. Jika Anda menggunakan salah satu layanan kami, atau berpartisipasi dalam salah satu survei, promosi, atau undian kami, kami mungkin meminta informasi tambahan, seperti usia, minat, atau preferensi produk Anda. Dari pembelian dan interaksi lainnya dengan kami, kami memperoleh informasi mengenai produk atau layanan spesifik yang Anda beli atau gunakan.
+        \n<b>BAGAIMANA KAMI MENGGUNAKAN INFORMASI YANG KAMI KUMPULKAN</b>\n
+        Kami menggunakan informasi yang kami kumpulkan untuk berbagai keperluan, diantaranya:
+        Untuk menyelesaikan transaksi pembelian Anda
+        Untuk memberikan layanan yang Anda minta
+        Mengirimkan katalog dan penawaran lainnya melalui email
+        Untuk mengidentifikasi preferensi produk dan layanan Anda, kami dapat memberi tahu Anda tentang produk, layanan, dan promosi baru atau tambahan yang mungkin menarik bagi Anda.
+        Memberi tahu Anda tentang penarikan produk atau memberikan informasi lain mengenai produk yang telah Anda beli
+        Untuk meningkatkan pilihan barang dagangan, layanan pelanggan, dan keseluruhan pengalaman berbelanja
+        \n<b>KETENTUAN PRIVASI</b>\n
+        ANDA MEMAHAMI DAN MENYETUJUI BAHWA LEJEL MEMILIKI HAK UNTUK MENGUNGKAPKAN INFORMASI PRIBADI ANDA PADA SEMUA BADAN PENEGAK HUKUM DAN PERATURAN PEMERINTAH YANG BERLAKU DI INDONESIA SEBAGAI UPAYA UNTUK MENJALANKAN ATURAN YANG TELAH DIBUAT OLEH PEMERINTAH. DAN  SEJAUH DIIZINKAN OLEH HUKUM YANG BERLAKU, DALAM HAL INI ANDA SETUJU UNTUK TIDAK MELAKUKAN TUNTUTAN APAPUN TERHADAP LEJEL UNTUK PENGUNGKAPAN INFORMASI PRIBADI ANDA.
+        PERUBAHAN PRIVASI
+        Kami memiliki hak untuk merubah kebijakan Privasi ini secara berkala dan tanpa pemberitahuan sebelumnya kepada Anda. Silahkan untuk mengunjungi Kebijakan Privasi kami untuk mengetahui perubahan yang kami lakukan.
+
+    </string>
 </resources>

@@ -3,12 +3,17 @@ package com.example.iptv.Views.Fragments
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.example.iptv.Models.User
+import com.example.iptv.Models.UserReg
 
 import com.example.iptv.R
+import com.example.iptv.api.service.AppKey
 import kotlinx.android.synthetic.main.fragment_register.*
 
 /**
@@ -34,12 +39,56 @@ class RegisterFragment : Fragment() {
             val data = activity?.intent?.getStringExtra("NOHP_EMAIL")
             reg_phone_email.setText(data)
         }
+
+        reg_btn.setOnClickListener{
+            if (isValid()) {
+                val username = reg_phone_email.text.toString().substringBefore("@")
+                if (reg_phone_email.text.toString().contains("@")) {
+                    val user = UserReg(
+                        reg_phone_email.text.toString(),
+                        "",
+                        reg_pass.text.toString(),
+                        "Android",
+                        "Email",
+                        username
+                    )
+                    listener!!.newAccount(user)
+                } else {
+                    val user = UserReg(
+                        "",
+                        reg_phone_email.text.toString(),
+                        reg_pass.text.toString(),
+                        "Android",
+                        "Phone",
+                        reg_phone_email.text.toString()
+                    )
+                    listener!!.newAccount(user)
+                }
+            } else {
+                Log.d(AppKey.FRAGMENT_KEY().REGISTER_F, "Valid = false")
+            }
+        }
+    }
+
+    private fun isValid(): Boolean {
+        var valid = false
+        if (
+            reg_phone_email.text.isNullOrEmpty() ||
+            reg_pass.text.isNullOrEmpty() ||
+            reg_pass2.text.isNullOrEmpty()) {
+            Toast.makeText(requireContext(), "Please Fill The Form", Toast.LENGTH_SHORT).show()
+        } else if (!reg_agreement.isChecked) {
+            Toast.makeText(requireContext(), "Please Check Agreement!",  Toast.LENGTH_SHORT).show()
+        } else if (reg_pass.text.toString() != reg_pass2.text.toString()) {
+            Toast.makeText(requireContext(), "Password Not Match", Toast.LENGTH_SHORT).show()
+        } else {
+            Log.d(AppKey.FRAGMENT_KEY().REGISTER_F, "Register Form Valid")
+            valid = true
+        }
+        return valid
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -68,7 +117,7 @@ class RegisterFragment : Fragment() {
      */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
+        fun newAccount(user: UserReg)
     }
 
 }

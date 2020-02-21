@@ -1,21 +1,20 @@
 package com.example.iptv.api.service
 
+import com.example.iptv.Models.ApiResponse
 import com.example.iptv.Models.User
+import com.example.iptv.Models.UserReg
 import retrofit2.Call
 import retrofit2.http.*
 
 interface UsersApiService {
-    @GET("verifikasi/")
-    fun getUsers(): Call<MutableList<User>>
 
-    @GET("verifikasi/{email}")
-    fun getUserViaEmail(@Path("email") email: String): Call<MutableList<User>>
+    @FormUrlEncoded
+    @POST("api/login")
+    fun authentication(@Field("email") email: String, @Field("password") password: String): Call<ApiResponse>
 
-    @GET("verifikasi/{phone}")
-    fun getUserViaPhone(@Path("phone") phone: String): Call<MutableList<User>>
+    @POST("api/register")
+    fun newUser(@Body user: UserReg): Call<ApiResponse>
 
-    @POST("verifikasi/")
-    fun newUser(@Body user: User): Call<MutableList<User>>
-    @PUT("verifikasi/{id}")
-    fun  updateUser(@Path("id") id: String, @Body user: User): Call<User>
+    @PUT("api/user/{id}")
+    fun updateUser(@Field("id") id: String, @Body user: UserReg): Call<ApiResponse>
 }

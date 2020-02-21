@@ -14,15 +14,19 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.example.iptv.Models.Banner
 import com.example.iptv.Models.Product
 
 import com.example.iptv.R
+import com.example.iptv.ViewModels.BannerViewModel
 import com.example.iptv.ViewModels.ProductsViewModel
 import com.example.iptv.Views.Activities.SecondaryActivity
 import com.example.iptv.Views.Adapters.ProductsAdapter
+import com.example.iptv.api.APIClient
 import com.example.iptv.api.service.AppKey
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -39,6 +43,9 @@ class ProductFragment : Fragment() {
     private lateinit var tel: String
     private lateinit var list: MutableList<Product>
     private lateinit var productsViewModel: ProductsViewModel
+    private lateinit var bannerViewModel: BannerViewModel
+
+    private lateinit var banner: MutableList<Banner>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +53,9 @@ class ProductFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         productsViewModel = ViewModelProviders.of(this).get(ProductsViewModel::class.java)
+
+        bannerViewModel = ViewModelProviders.of(this).get(BannerViewModel::class.java)
+        bannerViewModel.init()
         return inflater.inflate(R.layout.fragment_product, container, false)
     }
 
@@ -60,15 +70,24 @@ class ProductFragment : Fragment() {
             list = t
         })
 
-        product_carousel.setImageListener { position, imageView -> Picasso.get().load(bannerDummy()[position]).into(imageView) }
-        product_carousel.pageCount = bannerDummy().size
+        bannerViewModel.getBanner("produk").observe(this, Observer {
+            img -> bannerConfig(img)
+        })
 
         btn_buy_now.setOnClickListener{
-//            val intent = Intent(Intent.ACTION_DIAL)
-//            intent.setData(Uri.parse("tel:$tel"))
-//            startActivity(intent)
             openDialog()
         }
+    }
+
+    private fun bannerConfig(list: MutableList<Banner>) {
+        banner = mutableListOf()
+        banner = list
+        product_carousel.setImageListener { position, imageView ->
+            imageView.scaleType = ImageView.ScaleType.FIT_XY
+            val url = APIClient.IMAGE_PATH + banner[position].img
+            Picasso.get().load(url).into(imageView)
+        }
+        product_carousel.pageCount = banner.size
     }
 
     private fun openDialog() {
@@ -104,74 +123,13 @@ class ProductFragment : Fragment() {
         rv_products.Recycler()
     }
 
-    private fun bannerDummy(): MutableList<String> {
-        return mutableListOf(
-            "https://dxclnrbvyw82b.cloudfront.net/images/di/upload/20191016/1f1822eb-1ca4-4502-a57b-333683d38961/88/billbord-page-ec-tv-home-shopping-best-seller.jpg",
-            "https://dxclnrbvyw82b.cloudfront.net/images/di/upload/20191016/1f1822eb-1ca4-4502-a57b-333683d38961/88/billbord-page-ec-tv-home-shopping-best-seller.jpg"
-        )
-    }
-
     private fun detailActivity(position: Int) {
         val product: Product = list[position]
         val intent = Intent(this.activity, SecondaryActivity::class.java)
         intent.putExtra(AppKey.ACTIVITY_KEY().SEC_ACT, AppKey.FRAGMENT_KEY().PRODUCT_DETAIL_F)
         intent.putExtra("data_product", product)
+        intent.putExtra("videoId", product.videoId)
         startActivity(intent)
-    }
-
-    private fun dummyData(): MutableList<Product> {
-        val pdc: MutableList<Product> = mutableListOf()
-        pdc.add(
-            Product(
-                "1",
-                "https://alvaindopratama.com/eyeplus/image/Product/iwater.png",
-                "",
-                "eUZe0VNYSVM",
-                1000000,
-                40
-            )
-        )
-        pdc.add(
-            Product(
-                "2",
-                "https://alvaindopratama.com/eyeplus/image/Product/Kasur-web.png",
-                "",
-                "kB4UvComcEE",
-                1200000,
-                35
-            )
-        )
-        pdc.add(
-            Product(
-                "2",
-                "https://alvaindopratama.com/eyeplus/image/Product/thumbnail.jpg",
-                "",
-                "4VmFR3v64K0",
-                1400000,
-                20
-            )
-        )
-        pdc.add(
-            Product(
-                "Smartphone Sale",
-                "https://alvaindopratama.com/eyeplus/image/Product/thumbnail1.jpg",
-                "",
-                "0nuvRZ5rU40",
-                1150000,
-                25
-            )
-        )
-        pdc.add(
-            Product(
-                "",
-                "https://alvaindopratama.com/eyeplus/image/Product/colocasia.png",
-                "",
-                "0QwMbdhzQzw",
-                1000000,
-                30
-            )
-        )
-        return pdc
     }
 
 }

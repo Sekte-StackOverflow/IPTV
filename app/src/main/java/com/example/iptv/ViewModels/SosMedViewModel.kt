@@ -16,15 +16,15 @@ import retrofit2.Response
 
 class SosMedViewModel: ViewModel() {
     private lateinit var socialMedia: MutableLiveData<MutableList<SocialMedia>>
-    private lateinit var link: MutableLiveData<MutableList<SosMed>>
+//    private lateinit var link: MutableLiveData<MutableList<SosMed>>
     private lateinit var repo: SosmedRepo
 
     fun init() {
         repo = SosmedRepo.getInstance()
-        link = repo.getSocial()
     }
 
-    fun getSocialMedia(): LiveData<MutableList<SosMed>> {
-        return link
+    fun getSocialMedia(): LiveData<MutableList<SocialMedia>> {
+        socialMedia = repo.getSocialMedia()
+        return socialMedia
     }
 }

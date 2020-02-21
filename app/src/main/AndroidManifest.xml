@@ -26,6 +26,7 @@
         </activity>
         <activity
             android:name=".Views.Activities.SecondaryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|layoutDirection"
             android:parentActivityName=".Views.Activities.MainActivity" />
         <activity
             android:name=".Views.Activities.AuthActivity"

@@ -7,8 +7,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.example.iptv.Models.User
 
 import com.example.iptv.R
+import com.example.iptv.ViewModels.SessionViewModel
+import kotlinx.android.synthetic.main.fragment_change_pass.*
 
 /**
  * A simple [Fragment] subclass.
@@ -18,19 +24,40 @@ import com.example.iptv.R
  */
 class ChangePassFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
+    private lateinit var sessionViewModel: SessionViewModel
+    private lateinit var user: User
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        sessionViewModel = ViewModelProviders.of(this).get(SessionViewModel::class.java)
+        sessionViewModel.init(activity!!.applicationContext)
         return inflater.inflate(R.layout.fragment_change_pass, container, false)
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        listener?.onFragmentInteraction(uri)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sessionViewModel.isLoginLive().observe(this, Observer{
+                t -> setEmail(t)
+        })
     }
+
+    private fun setEmail(isLogin: Boolean) {
+        if (isLogin) {
+            sessionViewModel.getUser().observe(this, Observer {
+                    t ->  user = t
+                if (t.email != "") {
+                    change_pass_Email.setText(t.email)
+                } else {
+                    change_pass_Email.setText(t.phone)
+                }
+            })
+        }
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -59,7 +86,7 @@ class ChangePassFragment : Fragment() {
      */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
+        fun changePassword()
     }
 
 }

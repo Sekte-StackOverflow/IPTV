@@ -22,13 +22,18 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.example.iptv.Models.Banner
 import com.example.iptv.Models.Channel
 
 import com.example.iptv.R
+import com.example.iptv.ViewModels.BannerViewModel
 import com.example.iptv.ViewModels.MediaPlayerViewModel
+import com.example.iptv.ViewModels.ProductsViewModel
+import com.example.iptv.ViewModels.SessionViewModel
 import com.example.iptv.Views.Activities.FullscreenActivity
 import com.example.iptv.Views.Adapters.MoviesAdapters
 import com.example.iptv.Views.Adapters.PlayerAdapters
+import com.example.iptv.api.APIClient
 import com.example.iptv.api.SSLconfig
 import com.example.iptv.api.service.AppKey
 import com.google.android.exoplayer2.*
@@ -58,18 +63,23 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
     }
 
     private lateinit var viewModel: MediaPlayerViewModel
+    private lateinit var session: SessionViewModel
+    private lateinit var banner: BannerViewModel
+
     private lateinit var simpleExoPlayer: SimpleExoPlayer
     private lateinit var moviesAdapters: MoviesAdapters
 
     private lateinit var moviePlayer: PlayerAdapters
 
     private var movieList: MutableList<Channel>? = null
-    private var bannerList: MutableList<String> = mutableListOf()
+    private var bannerList: MutableList<Banner> = mutableListOf()
 
     private var playbackPosition = 0L
+    private var isLogin = false
     private lateinit var ssl: SSLconfig
     private var hlsUrl : String = ""
     private var isPlay = false
+    private var status = ""
 
 //    private var hlsUrl = "https://stream.suryaiptv.net/streams/22_.m3u8"
 
@@ -92,6 +102,10 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
         ssl = SSLconfig()
         ssl.isSSLCestification(false)
         viewModel = ViewModelProviders.of(this).get(MediaPlayerViewModel::class.java)
+        session = ViewModelProviders.of(this).get(SessionViewModel::class.java)
+        banner = ViewModelProviders.of(this).get((BannerViewModel::class.java))
+        session.init(requireContext())
+        banner.init()
         return inflater.inflate(R.layout.media_player_fragment, container, false)
     }
 
@@ -110,28 +124,35 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
             t -> movieListView(t)
         })
 
-        bannerConfig()
+        banner.getBanner("Channel").observe(this, Observer {
+            img -> bannerConfig(img)
+        })
 
-        exo_fullscreen_button.setOnClickListener{
-            fullscreenAction()
-        }
-
-//        val display = activity!!.getSystemService<WindowManager>()!!.defaultDisplay
-//        val orttn = display.orientation
-//        when(orttn) {
-//            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE -> Toast.makeText(context, "Landscape state", Toast.LENGTH_SHORT).show()
-//            ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT -> Toast.makeText(context, "Potrait state", Toast.LENGTH_SHORT).show()
+//        exo_fullscreen_button.setOnClickListener{
+//            fullscreenAction()
 //        }
 
     }
 
-    private fun bannerConfig() {
-        bannerList = bannerData()
+    private fun modeVideo(status: String) {
+        if (status.toLowerCase().contains("live")) {
+            exo_modeVideo.visibility = View.VISIBLE
+            exo_seek_bar.visibility = View.INVISIBLE
+        } else {
+            exo_modeVideo.visibility = View.GONE
+            exo_seek_bar.visibility = View.VISIBLE
+        }
+
+    }
+
+    private fun bannerConfig(list: MutableList<Banner>) {
+        bannerList = list
         carousel_banner.setViewListener(object : ViewListener {
             override fun setViewForPosition(position: Int): View {
                 val myView = layoutInflater.inflate(R.layout.the_banner, null)
                 val img: ImageView = myView.findViewById(R.id.img_banner)
-                Picasso.get().load(bannerList[position]).into(img)
+                val url = APIClient.IMAGE_PATH + bannerList[position].img
+                Picasso.get().load(url).into(img)
                 return myView
             }
         })
@@ -146,10 +167,12 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
         val intent = Intent(context, FullscreenActivity::class.java)
         intent.putExtra("playbackPosition", playbackPosition)
         intent.putExtra("videoUrl", hlsUrl)
+        intent.putExtra("status", status)
         startActivity(intent)
         simpleExoPlayer.release()
     }
 
+    @SuppressLint("DefaultLocale")
     private fun movieListView(channels: MutableList<Channel>) {
         movieList = channels
         moviesAdapters = MoviesAdapters(movieList)
@@ -164,8 +187,25 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
 //                Toast.makeText(requireContext(), "NO_CHANNEL_URI", Toast.LENGTH_SHORT).show()
                 Log.d(AppKey.FRAGMENT_KEY().STREAMING_F, "NO_CHANNEL_ARE_PLAY")
             } else {
-                hlsUrl = movieList!![position].videoUrl
-                isPlay = true
+                session.isLoginLive().observe(this, Observer {
+                    isLogin = it
+                    if (movieList!![position].userType.toLowerCase() == "subscribe") {
+                        if (it) {
+                            status = movieList!![position].status
+                            modeVideo(status)
+                            hlsUrl = movieList!![position].videoUrl
+                            isPlay = true
+                        } else {
+                            Log.d(AppKey.FRAGMENT_KEY().STREAMING_F, "SUBSCRIBE_FIRST")
+                            Toast.makeText(context, "Please Subscribe first", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        status = movieList!![position].status
+                        modeVideo(status)
+                        hlsUrl = movieList!![position].videoUrl
+                        isPlay = true
+                    }
+                })
             }
             moviePlayer = PlayerAdapters(requireContext(), hlsUrl)
             simpleExoPlayer = moviePlayer.initExoPlayer()
@@ -180,7 +220,7 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
     override fun onStart() {
         super.onStart()
         if (hlsUrl.isNullOrEmpty()) {
-            Toast.makeText(context, "No Vidio is Played", Toast.LENGTH_SHORT).show()
+            Log.d(AppKey.FRAGMENT_KEY().STREAMING_F,"No Video Are Played")
         } else {
             prepareToPlay()
         }
@@ -251,100 +291,6 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
         }
     }
 
-//    private fun getDataDummy(): MutableList<Channel> {
-//        val movies = mutableListOf<Channel>()
-//        // 1
-//        movies.add(
-//            Channel(
-//                "K-Drama",
-//                "5089",
-//                "https://alvaindopratama.com/eyeplus/image/Live%20Video/K-Drama.jpg",
-//                "Live",
-//                "https://stream.suryaiptv.net/streams/40_.m3u8"
-//            )
-//        )
-//        // 2
-//        movies.add(
-//            Channel(
-//                "Sinema Indonesia",
-//                "1190",
-//                "https://alvaindopratama.com/eyeplus/image/Live%20Video/Sinema%20Indonesia.jpg",
-//                "Live",
-//                "https://stream.suryaiptv.net/streams/124_.m3u8"
-//            )
-//        )
-//        // 3
-//        movies.add(
-//            Channel(
-//            "Sinema X",
-//            "12000",
-//            "https://alvaindopratama.com/eyeplus/image/Live%20Video/Sinema%20X.jpg",
-//            "Live",
-//                ""
-//            )
-//        )
-//        // 4
-//        movies.add(
-//            Channel(
-//            "TVP",
-//                "10000",
-//                "https://alvaindopratama.com/eyeplus/image/Live%20Video/TVP.jpg",
-//            "Live",
-//                ""
-//
-//            )
-//        )
-//        // 5
-//        movies.add(
-//            Channel(
-//            "M-Cine",
-//            "8090",
-//            "https://alvaindopratama.com/eyeplus/image/Live%20Video/M-Cine.jpg",
-//                "Live",
-//                ""
-//            )
-//        )
-//        // 6
-//        movies.add(
-//            Channel(
-//            "FTV",
-//                "2790",
-//                "https://alvaindopratama.com/eyeplus/image/Live%20Video/FTV.jpg",
-//                "Live",
-//                ""
-//            )
-//        )
-//        //
-//        movies.add(
-//            Channel(
-//                "Drakor Plus",
-//                "2810",
-//                "https://alvaindopratama.com/eyeplus/image/Live%20Video/Drakor%20Plus.jpg",
-//                "Live",
-//                "https://stream.suryaiptv.net/streams/132_.m3u8"
-//            )
-//        )
-//        movies.add(
-//            Channel(
-//                "Lejel Shopping",
-//                "2810",
-//                "https://alvaindopratama.com/eyeplus/image/Live%20Video/Lajel%20Shopping.jpg",
-//                "Live",
-//                ""
-//            )
-//        )
-//        movies.add(
-//            Channel(
-//                "Lejel Live",
-//                "2810",
-//                "https://alvaindopratama.com/eyeplus/image/Live%20Video/Lajel%20Live%20Shopping.jpg",
-//                "Live",
-//                "https://stream.suryaiptv.net/streams/125_.m3u8"
-//            )
-//        )
-//
-//        return movies
-//    }
 
     private fun bannerData(): MutableList<String> {
         val data = mutableListOf(
