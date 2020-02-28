@@ -1,19 +1,25 @@
 package com.example.iptv.Views.Activities
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.Window
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.iptv.Models.AppDataSet
 import com.example.iptv.Models.Product
 import com.example.iptv.Models.User
 import com.example.iptv.R
 import com.example.iptv.ViewModels.SessionViewModel
+import com.example.iptv.ViewModels.myActivitiesViewModel
 import com.example.iptv.Views.Adapters.PagerAdapter
 import com.example.iptv.Views.Fragments.ProductDetailFragment
 import com.example.iptv.Views.Fragments.ProductFragment
@@ -37,15 +43,26 @@ class MainActivity : AppCompatActivity(),
 {
     private lateinit var pagerAdapter: PagerAdapter
     private var isLogin: Boolean = false
-    private var banner: MutableList<String> = mutableListOf()
     private lateinit var user: User
+    private lateinit var profile: AppDataSet
     private lateinit var sessionViewModel: SessionViewModel
+    private lateinit var myActivities: myActivitiesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         sessionViewModel = ViewModelProviders.of(this).get(SessionViewModel::class.java)
+        myActivities = ViewModelProviders.of(this).get(myActivitiesViewModel::class.java)
+        myActivities.init()
         sessionViewModel.init(applicationContext)
+
+        myActivities.getAppUtil().observe(this, Observer {
+            profile = it[0]
+            Picasso.get()
+                .load(APIClient.IMAGE_PATH + profile.logoapp)
+                .into(my_logo)
+        })
+
         sessionViewModel.getUser().observe(this, Observer {
             t ->
             if (t.email != "" && t.phone !="") {
@@ -55,21 +72,25 @@ class MainActivity : AppCompatActivity(),
             }
         })
         sessionViewModel.isLoginLive().observe(this, Observer {
-            t -> isLogin = t
+                t -> isLogin = t
             navDrawer(user, isLogin)
         })
-
+        sessionViewModel.getUser().observe(this, Observer {
+                t ->
+            if (t.email != "" && t.phone !="") {
+                user = t
+            } else {
+                user = t
+            }
+        })
 
         pagerAdapter = PagerAdapter(supportFragmentManager, tabs.tabCount)
         view_pager.adapter = pagerAdapter
         view_pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs))
         tabs.addOnTabSelectedListener(this)
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(main_activity_container.id, fragment)
-            .commit()
+        if (intent.getIntExtra("PHASE", 0) == 1) {
+            view_pager.currentItem = 1
+        }
     }
 
     override fun onTabReselected(tab: TabLayout.Tab) {
@@ -153,8 +174,8 @@ class MainActivity : AppCompatActivity(),
                         }
                         7 -> {
                             if (isLogin) {
-                                val intent = Intent(this@MainActivity, AuthActivity::class.java)
-                                intent.putExtra(AppKey.ACTIVITY_KEY().AUTH_ACT, AppKey.FRAGMENT_KEY().CHANG_PASS_F)
+                                val intent = Intent(this@MainActivity, WebViewActivity::class.java)
+                                intent.putExtra(WebViewActivity.KEY_URL, "https://eyeplus.co.id/login/")
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                                 startActivity(intent)
                             } else {
@@ -188,20 +209,26 @@ class MainActivity : AppCompatActivity(),
             navNm.text = "My Profile"
         }
         val navImg = myHeader.findViewById<CircularImageView>(R.id.nav_header_profile)
-
         if (isLogin) {
-            Picasso.get()
-                .load(APIClient.IMAGE_PATH)
-                .into(navImg)
+            if (user.profile.toLowerCase() == "null" || user.profile == "" || user.profile == null
+                || isChange().profile == "null" || isChange().profile == ""
+            ) {
+                Picasso.get()
+                    .load(Uri.parse("https://cdn.iconscout.com/icon/free/png-256/account-profile-avatar-man-circle-round-user-30452.png"))
+                    .into(navImg)
+            } else {
+                Picasso.get()
+                    .load(APIClient.IMAGE_PATH + user.profile)
+                    .into(navImg)
+            }
         } else {
             Picasso.get()
                 .load(Uri.parse("https://cdn.iconscout.com/icon/free/png-256/account-profile-avatar-man-circle-round-user-30452.png"))
                 .into(navImg)
         }
-
         navImg.setImageDrawable(getDrawable(R.drawable.eyeplus24))
-
-//        mToolbar.setLogo(R.drawable.logo_white_version)
+        // toolbar
+//        my_logo.setImageResource(R.drawable.eyeplus65)
         mToolbar.setNavigationOnClickListener{
             if (result.isDrawerOpen) {
                 result.closeDrawer()
@@ -210,6 +237,13 @@ class MainActivity : AppCompatActivity(),
             }
         }
 
+    }
+
+    private fun isChange(): User {
+        sessionViewModel.getUser().observe(this, Observer {
+            this.user = it
+        })
+        return user
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab?) { }

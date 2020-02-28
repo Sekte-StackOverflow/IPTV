@@ -65,9 +65,9 @@ class AuthActivity : AppCompatActivity(),
             if (res != null) {
                 if (res.response.status == "200" && res.response.message.toLowerCase() == "success") {
                     val user = if (type == "email") {
-                        User(username, "", password)
+                        User(res.response.data, username, "", password, res.response.profile)
                     } else {
-                        User("", username, password)
+                        User(res.response.data,"", username, password, res.response.profile)
                     }
                     Log.d(AppKey.ACTIVITY_KEY().AUTH_ACT, "Login Success: $username")
                     sessionViewModel.createUser(user)
@@ -87,11 +87,14 @@ class AuthActivity : AppCompatActivity(),
         authViewModel.newUser(user).observe(this, Observer {
             res ->
             if (res != null) {
-                if (res.response.status == "200" && res.response.message.toLowerCase() == "success") {
+                if (res.response.status == "201" && res.response.message.toLowerCase() == "success") {
                     Log.d(AppKey.ACTIVITY_KEY().AUTH_ACT, "Register Success")
                     Toast.makeText(applicationContext, "Register Success, Please goto Login", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this@AuthActivity, MainActivity::class.java))
                     finish()
+                } else if(res.response.status == "409" && res.response.message == "Exist") {
+                    Log.d(AppKey.ACTIVITY_KEY().AUTH_ACT, "Duplicate Entry")
+                    Toast.makeText(applicationContext, "This Email/phone already use", Toast.LENGTH_SHORT).show()
                 } else {
                     Log.d(AppKey.ACTIVITY_KEY().AUTH_ACT, "Register Failed")
                     Toast.makeText(applicationContext, "Register Failed, Try Again", Toast.LENGTH_SHORT).show()

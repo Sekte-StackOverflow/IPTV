@@ -12,11 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 
 import com.example.iptv.R
 import com.example.iptv.ViewModels.SessionViewModel
+import com.example.iptv.ViewModels.myActivitiesViewModel
 import com.example.iptv.Views.Activities.AuthActivity
 import com.example.iptv.api.service.AppKey
 import kotlinx.android.synthetic.main.fragment_info.*
@@ -27,14 +29,18 @@ import kotlinx.android.synthetic.main.fragment_info.view.*
  */
 class InfoFragment : Fragment() {
     private lateinit var sessionViewModel: SessionViewModel
+    private lateinit var myActivities: myActivitiesViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
+        myActivities = ViewModelProviders.of(this).get(myActivitiesViewModel::class.java)
         sessionViewModel = ViewModelProviders.of(this).get(SessionViewModel::class.java)
         sessionViewModel.init(requireContext())
+        myActivities.init()
         return inflater.inflate(R.layout.fragment_info, container, false)
     }
 
@@ -46,6 +52,13 @@ class InfoFragment : Fragment() {
 
         sessionViewModel.isLoginLive().observe(this, Observer {
             isLogin ->
+            sudah_punya_akun.isEnabled = !isLogin
+            if (isLogin) {
+                sudah_punya_akun.visibility = View.INVISIBLE
+            } else {
+                sudah_punya_akun.visibility = View.VISIBLE
+            }
+
             if (isLogin) {
                 sessionViewModel.getUser().observe(this, Observer {
                     user ->
@@ -128,11 +141,11 @@ class InfoFragment : Fragment() {
     fun showPolcy() {
         val dialog = Dialog(requireContext())
         dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        val dialogView = layoutInflater.inflate(R.layout.policy_layout, null)
-        dialog.setContentView(dialogView)
+        dialog.setContentView(R.layout.policy_layout)
+        val text = dialog.window!!.decorView.findViewById<TextView>(R.id.text_policy)
+        myActivities.getAppUtil().observe(this, Observer {
+            text.text = it[0].sk
+        })
         dialog.show()
     }
-
-
-
 }

@@ -16,9 +16,11 @@ class SessionManagement {
 
     private var PREF_NAME = "AUTH_EYEPLUS"
     private var IS_LOGIN = "IsLoggedIn"
-//    private var KEY_NAME = "myName"
+    private var KEY_DIALOF = "Dialog"
+    private var KEY_ID = "myID"
     private var KEY_EMAIL = "myEmail"
     private var KEY_PHONE = "myPhone"
+    private var KEY_PROFILE = "myProfile"
 
     companion object {
         fun newInstance() = SessionManagement()
@@ -31,10 +33,12 @@ class SessionManagement {
     }
 
     // create Login session
-    fun createLoginSession(email: String, phone: String) {
+    fun createLoginSession(id: String ,email: String, phone: String, profile: String) {
         editor.putBoolean(IS_LOGIN, true)
+        editor.putString(KEY_ID, id)
         editor.putString(KEY_EMAIL, email)
         editor.putString(KEY_PHONE, phone)
+        editor.putString(KEY_PROFILE, profile)
         editor.commit()
     }
 
@@ -52,9 +56,11 @@ class SessionManagement {
 //     get Stored Session data
     fun getUserDetail(): User {
         val user = User(
+            pref.getString(KEY_ID, "")!!,
             pref.getString(KEY_EMAIL, "")!!,
             pref.getString(KEY_PHONE, "")!!,
-            ""
+            "",
+            pref.getString(KEY_PROFILE, "")!!
         )
         return user
     }
@@ -68,5 +74,4 @@ class SessionManagement {
     fun isLoggedIn(): Boolean {
         return pref.getBoolean(IS_LOGIN, false)
     }
-
 }

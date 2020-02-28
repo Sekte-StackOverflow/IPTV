@@ -14,6 +14,7 @@ import androidx.core.text.isDigitsOnly
 import com.example.iptv.Models.User
 
 import com.example.iptv.R
+import com.example.iptv.Views.Activities.WebViewActivity
 import kotlinx.android.synthetic.main.fragment_login.*
 
 /**
@@ -24,6 +25,9 @@ import kotlinx.android.synthetic.main.fragment_login.*
  */
 class LoginFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
+
+    private var emailValidation: Boolean = false
+    private var passValidation: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +41,6 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         login_btn.setOnClickListener {
-            var emailValidation = false
-            var passValidation = false
 
             if (TextUtils.isEmpty(login_email_phone.text.toString().trim())) {
                 login_emailLayout.error = "Email or Phone is Empty!"
@@ -78,12 +80,11 @@ class LoginFragment : Fragment() {
         }
 
         login_forgetPass.setOnClickListener{
-            startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://eyeplus.co.id/password/reset")))
+            val intent = Intent(activity!!.applicationContext, WebViewActivity::class.java)
+            intent.putExtra(WebViewActivity.KEY_URL, "https://eyeplus.co.id/password/reset")
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(intent)
         }
-    }
-
-    fun isNumeric(str: String): Boolean {
-        return str.isDigitsOnly()
     }
 
     // TODO: Rename method, update argument and hook method into UI event

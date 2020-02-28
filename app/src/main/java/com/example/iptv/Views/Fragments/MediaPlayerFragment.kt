@@ -1,6 +1,8 @@
 package com.example.iptv.Views.Fragments
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -9,27 +11,21 @@ import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.example.iptv.Models.Banner
-import com.example.iptv.Models.Channel
+import com.example.iptv.Models.*
 
 import com.example.iptv.R
-import com.example.iptv.ViewModels.BannerViewModel
-import com.example.iptv.ViewModels.MediaPlayerViewModel
-import com.example.iptv.ViewModels.ProductsViewModel
-import com.example.iptv.ViewModels.SessionViewModel
+import com.example.iptv.ViewModels.*
 import com.example.iptv.Views.Activities.FullscreenActivity
 import com.example.iptv.Views.Adapters.MoviesAdapters
 import com.example.iptv.Views.Adapters.PlayerAdapters
@@ -49,12 +45,15 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.mikepenz.iconics.Iconics.applicationContext
+import com.mikepenz.materialdrawer.util.ifNull
 import com.squareup.picasso.Picasso
 import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageListener
 import com.synnapps.carouselview.ViewListener
 import kotlinx.android.synthetic.main.exo_playback_control_view.*
 import kotlinx.android.synthetic.main.media_player_fragment.*
+import org.json.JSONObject
+import java.util.*
 
 class MediaPlayerFragment : Fragment(), Player.EventListener {
 
@@ -63,8 +62,16 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
     }
 
     private lateinit var viewModel: MediaPlayerViewModel
+    private lateinit var myActivities: myActivitiesViewModel
+
     private lateinit var session: SessionViewModel
     private lateinit var banner: BannerViewModel
+
+    private lateinit var dialog: Dialog
+    private lateinit var dialogData: Banner
+    private lateinit var user: User
+
+    private var tmpClick = -1
 
     private lateinit var simpleExoPlayer: SimpleExoPlayer
     private lateinit var moviesAdapters: MoviesAdapters
@@ -76,24 +83,13 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
 
     private var playbackPosition = 0L
     private var isLogin = false
+
     private lateinit var ssl: SSLconfig
     private var hlsUrl : String = ""
     private var isPlay = false
     private var status = ""
 
-//    private var hlsUrl = "https://stream.suryaiptv.net/streams/22_.m3u8"
-
-//    private val hlsUrl = "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8video/250kbit.m3u8"
-
-//    private val hlsUrl = "http://api.new.livestream.com/accounts/22711876/events/6759790/live.m3u8"
-//    private val hlsUrl = "http://hls.ksl.com/t/KSL_NEWSRADIO/playlist.m3u8"
-
-    private val bandwidthMeter by lazy { DefaultBandwidthMeter() }
-    private val adaptiveTrackSelection by lazy {
-        AdaptiveTrackSelection.Factory(bandwidthMeter)
-    }
-
-
+    private lateinit var ipPublic: PublicIPAddress
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -104,14 +100,30 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
         viewModel = ViewModelProviders.of(this).get(MediaPlayerViewModel::class.java)
         session = ViewModelProviders.of(this).get(SessionViewModel::class.java)
         banner = ViewModelProviders.of(this).get((BannerViewModel::class.java))
+        myActivities = ViewModelProviders.of(this).get(myActivitiesViewModel::class.java)
+        myActivities.init()
+
         session.init(requireContext())
-        banner.init()
+        session.getPublicIP().observe(this, Observer {
+            ipPublic = it
+        })
+
+
         return inflater.inflate(R.layout.media_player_fragment, container, false)
     }
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        banner.init()
+        banner.getImageDialog().observe(this, Observer {
+            dialogData = it[0]
+            dialog = Dialog(requireContext())
+            val sharePref = activity!!.getSharedPreferences("My_DIALOG", Context.MODE_PRIVATE)
+            showDiaolog(sharePref.getBoolean("INIT_START", false))
+            sharePref.edit().putBoolean("INIT_START", false).apply()
+        })
+
 
         if (!activity?.intent?.getStringExtra("resVidUri").isNullOrEmpty()) {
             hlsUrl = activity!!.intent.getStringExtra("resVidUri")
@@ -123,14 +135,16 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
         viewModel.getAllChannel().observe(this, Observer {
             t -> movieListView(t)
         })
+        session.getUser().observe(this, Observer {
+            user = it
+        })
+        session.isLoginLive().observe(this, Observer {
+            isLogin = it
+        })
 
         banner.getBanner("Channel").observe(this, Observer {
             img -> bannerConfig(img)
         })
-
-//        exo_fullscreen_button.setOnClickListener{
-//            fullscreenAction()
-//        }
 
     }
 
@@ -142,7 +156,6 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
             exo_modeVideo.visibility = View.GONE
             exo_seek_bar.visibility = View.VISIBLE
         }
-
     }
 
     private fun bannerConfig(list: MutableList<Banner>) {
@@ -151,6 +164,15 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
             override fun setViewForPosition(position: Int): View {
                 val myView = layoutInflater.inflate(R.layout.the_banner, null)
                 val img: ImageView = myView.findViewById(R.id.img_banner)
+                img.setOnClickListener {
+                    if(bannerList[position].link == "null" || bannerList[position].link == "" || bannerList[position].link == null) {
+//                        Toast.makeText(requireContext(), "NO_URL", Toast.LENGTH_SHORT).show()
+                        Log.d("MEDIA", "BANNER_URL_NULL")
+                    } else {
+                        startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(bannerList[position].link)))
+                    }
+
+                }
                 val url = APIClient.IMAGE_PATH + bannerList[position].img
                 Picasso.get().load(url).into(img)
                 return myView
@@ -178,34 +200,19 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
         moviesAdapters = MoviesAdapters(movieList)
         moviesAdapters.setOnItemClickListener{
                 adapter, view, position ->
-            //            Toast.makeText(requireContext(), movieList!![position].name, Toast.LENGTH_SHORT).show()
             playbackPosition = 0L
             if (isPlay) {
                 simpleExoPlayer.release()
             }
-            if (movieList!![position].videoUrl.isNullOrEmpty() || movieList!![position].videoUrl.equals(".")){
-//                Toast.makeText(requireContext(), "NO_CHANNEL_URI", Toast.LENGTH_SHORT).show()
-                Log.d(AppKey.FRAGMENT_KEY().STREAMING_F, "NO_CHANNEL_ARE_PLAY")
+            if (movieList!![position].userType.toLowerCase() == "subscriber") {
+                if (isLogin) {
+                    playChannel(position)
+                } else {
+                    Log.d(AppKey.FRAGMENT_KEY().STREAMING_F, "SUBSCRIBE_FIRST")
+                    Toast.makeText(context, "Please Subscribe first", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                session.isLoginLive().observe(this, Observer {
-                    isLogin = it
-                    if (movieList!![position].userType.toLowerCase() == "subscribe") {
-                        if (it) {
-                            status = movieList!![position].status
-                            modeVideo(status)
-                            hlsUrl = movieList!![position].videoUrl
-                            isPlay = true
-                        } else {
-                            Log.d(AppKey.FRAGMENT_KEY().STREAMING_F, "SUBSCRIBE_FIRST")
-                            Toast.makeText(context, "Please Subscribe first", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        status = movieList!![position].status
-                        modeVideo(status)
-                        hlsUrl = movieList!![position].videoUrl
-                        isPlay = true
-                    }
-                })
+                playChannel(position)
             }
             moviePlayer = PlayerAdapters(requireContext(), hlsUrl)
             simpleExoPlayer = moviePlayer.initExoPlayer()
@@ -215,6 +222,33 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
         moviesAdapters.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         rv_movies.adapter = moviesAdapters
         rv_movies.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+    }
+
+    private fun playChannel(position: Int) {
+        if (movieList!![position].videoUrl.isNullOrEmpty() || movieList!![position].videoUrl.equals(".")){
+            Toast.makeText(requireContext(), "NO_CHANNEL_URI", Toast.LENGTH_SHORT).show()
+            Log.d(AppKey.FRAGMENT_KEY().STREAMING_F, "NO_CHANNEL_ARE_PLAY")
+        } else {
+            status = movieList!![position].status
+            modeVideo(status)
+            hlsUrl = movieList!![position].videoUrl
+            if (tmpClick != position) {
+                moviesAdapters.updateView(position)
+                moviesAdapters.notifyDataSetChanged()
+                watchingRes(movieList!![position])
+                tmpClick = position
+            }
+            isPlay = true
+
+        }
+    }
+
+    private fun watchingRes(channel: Channel) {
+        val userActivity = UserActivities(channel.id.toString(), channel.name, user.id)
+        Log.d("MEDIA_FRAGMENT", JSONObject.quote(userActivity.toString()))
+        myActivities.postMyActivity(userActivity).observe(this, Observer {
+            Log.d("POST status", "[${it.response.status}] : ${it.response.message}")
+        })
     }
 
     override fun onStart() {
@@ -241,6 +275,7 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
         }
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -291,14 +326,19 @@ class MediaPlayerFragment : Fragment(), Player.EventListener {
         }
     }
 
-
-    private fun bannerData(): MutableList<String> {
-        val data = mutableListOf(
-            "https://alvaindopratama.com/eyeplus/image/banner/1.jpg",
-            "https://alvaindopratama.com/eyeplus/image/banner/2.jpg",
-            "https://alvaindopratama.com/eyeplus/image/banner/3.jpg"
-        )
-        return data
+    private fun showDiaolog(show: Boolean) {
+        if (show) {
+//            val path = "https://lejel.co.id/media/popupbanner/pop-up-valentine.png"
+            val path = APIClient.IMAGE_PATH + dialogData.img
+            dialog.setContentView(R.layout.custom_dialog_xl)
+            dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            val tmp = dialog.window!!.decorView.findViewById<ImageView>(R.id.dialog_img_XL)
+            tmp.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(dialogData.link)))
+            }
+            Picasso.get().load(path).into(tmp)
+            dialog.show()
+        }
     }
 
 }

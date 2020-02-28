@@ -6,5 +6,7 @@ data class Banner(
     @SerializedName("tipe")
     val type: String,
     @SerializedName("android")
-    val img: String
+    val img: String,
+    @SerializedName("link")
+    val link: String
 )

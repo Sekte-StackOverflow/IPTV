@@ -33,21 +33,22 @@ class SecondaryActivity : AppCompatActivity(),
         actionBar?.show()
         actionBar?.setDisplayHomeAsUpEnabled(true)
         secondToolbar.setNavigationOnClickListener{
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            startActivity(intent)
+            val intent2 = Intent(this, MainActivity::class.java)
+            intent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            if (intent.getParcelableExtra<Product>("data_product") != null) {
+                intent2.putExtra("PHASE", 1)
+            }
+            intent.removeExtra("data_product")
+            startActivity(intent2)
             finish()
-
         }
 
         when(intent.getStringExtra(AppKey.ACTIVITY_KEY().SEC_ACT)) {
             AppKey.FRAGMENT_KEY().ABOUT_F -> {
-                fake_toolbar.visibility = View.GONE
                 loadFragment(AboutFragment())
             }
             AppKey.FRAGMENT_KEY().PRODUCT_DETAIL_F -> {
                 if (intent.getParcelableExtra<Product>("data_product") != null) {
-                    fake_toolbar.visibility = View.VISIBLE
                     val mProduct = intent.getParcelableExtra<Product>("data_product")
                     val fragment = ProductDetailFragment()
                     productsViewModel.getDetailProduct(mProduct.id.toString()).observe(this, Observer {

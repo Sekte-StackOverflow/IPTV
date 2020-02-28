@@ -5,7 +5,10 @@ import com.google.gson.annotations.SerializedName
 data class Channel(
     val id: Int,
     val name: String,
-    val views: Int = 0,
+    @SerializedName("watching_a")
+    var views1: Int = 0,
+    @SerializedName("watching_w")
+    val views2: Int = 0,
     @SerializedName("thumbnail")
     val imageUrl: String,
     @SerializedName("tipevideo")

@@ -1,4 +1,10 @@
 package com.example.iptv.Models
 
-data class DetailItem(val key: String, val value: String) {
+import com.google.gson.annotations.SerializedName
+
+data class DetailItem(
+    @SerializedName("deskripsi")
+    val key: String,
+    val value: String
+) {
 }

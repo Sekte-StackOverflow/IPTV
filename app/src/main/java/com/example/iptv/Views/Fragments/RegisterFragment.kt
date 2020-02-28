@@ -1,5 +1,6 @@
 package com.example.iptv.Views.Fragments
 
+import android.app.Dialog
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -8,11 +9,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.example.iptv.Models.AppDataSet
 import com.example.iptv.Models.User
 import com.example.iptv.Models.UserReg
 
 import com.example.iptv.R
+import com.example.iptv.ViewModels.myActivitiesViewModel
 import com.example.iptv.api.service.AppKey
 import kotlinx.android.synthetic.main.fragment_register.*
 
@@ -24,12 +31,20 @@ import kotlinx.android.synthetic.main.fragment_register.*
  */
 class RegisterFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
+    private lateinit var myActivities: myActivitiesViewModel
+    private lateinit var profile: AppDataSet
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        myActivities = ViewModelProviders.of(this).get(myActivitiesViewModel::class.java)
+        myActivities.init()
+        myActivities.getAppUtil().observe(this, Observer {
+            profile = it[0]
+        })
+
         return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
@@ -68,6 +83,10 @@ class RegisterFragment : Fragment() {
                 Log.d(AppKey.FRAGMENT_KEY().REGISTER_F, "Valid = false")
             }
         }
+
+        click_terms.setOnClickListener {
+            showPolcy()
+        }
     }
 
     private fun isValid(): Boolean {
@@ -88,6 +107,15 @@ class RegisterFragment : Fragment() {
         return valid
     }
 
+    fun showPolcy() {
+        val dialog = Dialog(requireContext())
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.policy_layout)
+        val text = dialog.window!!.decorView.findViewById<TextView>(R.id.text_policy)
+        text.text = profile.sk
+        dialog.show()
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
 
     override fun onAttach(context: Context) {
@@ -104,17 +132,6 @@ class RegisterFragment : Fragment() {
         listener = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
     interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         fun newAccount(user: UserReg)

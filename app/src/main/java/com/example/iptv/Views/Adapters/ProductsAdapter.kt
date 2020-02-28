@@ -17,6 +17,7 @@ class ProductsAdapter(data: MutableList<Product>?) :
     BaseQuickAdapter<Product, BaseViewHolder>(R.layout.product_item ,data) {
     override fun convert(helper: BaseViewHolder, item: Product?) {
         val img: ImageView = helper.getView(R.id.img_product)
+
         if (item?.diskon != 0) {
             val total = totalPrice(item!!.price!!.toDouble(), item.diskon.toDouble())
             helper.setText(R.id.product_diskon_percen, "${item.diskon} % OFF")

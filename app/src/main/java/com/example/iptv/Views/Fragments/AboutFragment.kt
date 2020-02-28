@@ -33,9 +33,9 @@ class AboutFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         about_appVersion.text = "v ${BuildConfig.VERSION_NAME}"
-        about_checkUpdate.setOnClickListener {
-            Toast.makeText(context, NO_UPDATE, Toast.LENGTH_SHORT).show()
-        }
+//        about_checkUpdate.setOnClickListener {
+//            Toast.makeText(context, NO_UPDATE, Toast.LENGTH_SHORT).show()
+//        }
     }
 
 

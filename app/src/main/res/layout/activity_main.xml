@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:keepScreenOn="true"
     android:id="@+id/main_activity_container"
     tools:context=".Views.Activities.MainActivity">
 
@@ -19,11 +20,23 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/mToolbar"
             app:navigationIcon="@drawable/ic_dehaze_black_32dp"
-            app:logo="@drawable/logo_white_45"
             android:background="@color/tab_brown"
             android:layout_width="match_parent"
             android:layout_height="@android:dimen/app_icon_size"
-            android:minHeight="@dimen/def_height"/>
+            android:minHeight="@dimen/def_height">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/my_logo"
+                    android:layout_width="90dp"
+                    android:layout_height="match_parent"
+                    android:paddingTop="@dimen/dp_4"
+                    android:paddingBottom="@dimen/dp_4"
+                    android:paddingStart="2dp"
+                    android:src="@drawable/eyeplus65" />
+            </FrameLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -35,28 +48,28 @@
             app:tabIndicatorColor="@color/tab_brown"
             app:tabIndicatorFullWidth="true"
             app:tabIndicatorHeight="@dimen/def_height"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:tabGravity="fill"
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed">
 
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:icon="@drawable/ic_live_tv_black_24dp" />
 
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:icon="@drawable/ic_local_grocery_store_black_24dp" />
 
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:icon="@drawable/ic_chat_bubble_outline_black_24dp" />
 
             <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:icon="@drawable/ic_account_circle_black_24dp" />
 
         </com.google.android.material.tabs.TabLayout>

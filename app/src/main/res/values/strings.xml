@@ -5,17 +5,17 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="masukkan_nomer_ponsel">Masukkan Nomer Ponsel</string>
-    <string name="pemberitahuan">Saya ingin menerima pemberitahuan dari EyePlus tentang promosi dan informasi eksklusif lainnya</string>
+    <string name="pemberitahuan">Saya ingin menerima pemberitahuan dari eyePLUS tentang promosi dan informasi eksklusif lainnya</string>
     <string name="kebijakan">
-        Dengan mendaftar saya setuju kepada syarat dan ketentuan EyePlus. <u>Syarat dan ketentuan yang berlaku dan kebijakan privasi.</u>
+        Dengan mendaftar saya setuju kepada syarat dan ketentuan eyePLUS. <u>Syarat dan ketentuan yang berlaku dan kebijakan privasi.</u>
     </string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="txt_copyright">\@2020 by EyePlus All Right Reserved</string>
+    <string name="txt_copyright">\@2020 by eyePLUS All Right Reserved</string>
     <string name="forget">I forgot my password</string>
-    <string name="agreement">I agree to the <b>terms</b></string>
+    <string name="agreement">I agree to the </string>
     <string name="descipt_txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</string>
     <string name="policy_txt">
         <b>KEBIJAKAN PRIVASI</b>\n
@@ -41,4 +41,5 @@
         Kami memiliki hak untuk merubah kebijakan Privasi ini secara berkala dan tanpa pemberitahuan sebelumnya kepada Anda. Silahkan untuk mengunjungi Kebijakan Privasi kami untuk mengetahui perubahan yang kami lakukan.
 
     </string>
+    <string name="term"> <b>terms</b></string>
 </resources>

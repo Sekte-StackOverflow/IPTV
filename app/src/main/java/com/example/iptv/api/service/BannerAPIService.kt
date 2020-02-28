@@ -6,9 +6,15 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface BannerAPIService {
-    @GET("bannerP/json")
+    @GET("api/bannerP/json")
     fun getBannerProduct(): Call<MutableList<Banner>>
 
-    @GET("bannerC/json")
+    @GET("api/bannerC/json")
     fun getBannerChannel(): Call<MutableList<Banner>>
+
+    @GET("api/bannerS/json")
+    fun getBannerSosmed(): Call<MutableList<Banner>>
+
+    @GET("api/bannerU/json")
+    fun getImageDialog(): Call<MutableList<Banner>>
 }

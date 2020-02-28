@@ -5,22 +5,23 @@
     android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_col"
     tools:context=".Views.Fragments.InfoFragment">
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="38dp"
-            android:gravity="center_horizontal"
+            android:paddingBottom="12dp"
+            android:gravity="center_horizontal|bottom"
             android:paddingTop="4dp"
-            android:background="@drawable/list_sparator"
+            android:background="@drawable/mid_bar"
             android:orientation="horizontal">
 
             <ImageView
@@ -37,7 +38,7 @@
                 android:textSize="14dp" />
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -48,6 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/materialCardView">
 
         <LinearLayout
+            android:background="@color/background_col"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -57,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_4"
                 android:text="Daftar"
+                android:background="@color/background_col"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -70,6 +73,7 @@
                 app:counterMaxLength="13"
                 app:errorEnabled="true"
                 app:placeholderText="| Masukkan Nomer Ponsel"
+                android:background="@color/background_col"
                 app:prefixText="ID +62 "
                 app:prefixTextColor="@color/black">
 
@@ -121,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Email"
                 app:boxBackgroundColor="@color/white"
+                android:background="@color/background_col"
                 app:endIconDrawable="@drawable/ic_email_black_24dp"
                 app:endIconMode="custom"
                 app:endIconTint="@color/black"
@@ -128,12 +133,15 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/info_email"
+                    android:background="@color/background_col"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:background="@color/background_col"
+                android:backgroundTint="@color/background_col"
                 android:id="@+id/sudah_punya_akun"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="match_parent"
@@ -149,7 +157,6 @@
                 app:icon="@drawable/ic_arrow_right"
                 app:iconGravity="end"
                 app:iconTint="@color/black" />
-
             <TextView
                 android:id="@+id/policy_link"
                 android:layout_width="match_parent"

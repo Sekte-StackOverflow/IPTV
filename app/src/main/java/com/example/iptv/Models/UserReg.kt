@@ -6,9 +6,11 @@ class UserReg(
     val phone: String,
     val password: String,
     @SerializedName("tipe_user") // default android
-    val tipeUser: String,
+    val tipeUser: String = "Android",
     @SerializedName("tipe_register") // default email or phone
     val tipeReg: String,
     @SerializedName("name")
-    val name: String
+    val name: String,
+    val status: String = "1",
+    val profile: String = "no_image.jpg"
 )

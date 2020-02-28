@@ -40,6 +40,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.You
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_product_detail.*
 import org.json.JSONObject
+import java.text.NumberFormat
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -65,6 +67,7 @@ class ProductDetailFragment : Fragment() {
         if (activity!!.intent.getParcelableExtra<Product>("data_product") != null) {
             val product = activity!!.intent.getParcelableExtra("data_product") as Product
             currentProduct = product
+            detail_product_name.text = currentProduct.name
             showList(listDetail)
         }
 
@@ -87,10 +90,9 @@ class ProductDetailFragment : Fragment() {
     private fun showDiaolog() {
         iklanDialog = Dialog(requireContext())
         iklanDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        val dialogView = layoutInflater.inflate(R.layout.image_dialog, null)
-        val img = dialogView.findViewById<ImageView>(R.id.dialog_img)
-        Picasso.get().load("https://alvaindopratama.com/eyeplus/image/banner/popup1.png").into(img)
-        iklanDialog.setContentView(dialogView)
+        iklanDialog.setContentView(R.layout.image_dialog)
+        val img = iklanDialog.window!!.decorView.findViewById<ImageView>(R.id.dialog_img)
+        Picasso.get().load("https://eyeplus.co.id/admin-eyeplus/media/img/Banner-Popup-Web.png").into(img)
         iklanDialog.show()
     }
 
@@ -99,8 +101,22 @@ class ProductDetailFragment : Fragment() {
     }
 
     private fun showList(details: MutableList<DetailItem>) {
-        image_thumbnail.visibility = View.VISIBLE
-        Picasso.get().load(APIClient.IMAGE_PATH + currentProduct.image).into(image_thumbnail)
+        img_detail.visibility = View.VISIBLE
+        if (currentProduct.diskon != 0 && currentProduct.diskon > 0) {
+            pd_diskon_frame.visibility = View.VISIBLE
+            pd_diskon.text = "${currentProduct.diskon} % OFF"
+            pd_price_before.text = idrCurrency(currentProduct.price!!.toDouble())
+            pd_price_after.text = idrCurrency(
+                totalPrice(
+                    currentProduct.price!!.toDouble(),
+                    currentProduct.diskon.toDouble()
+                )
+            )
+        } else {
+            pd_diskon_frame.visibility = View.INVISIBLE
+            pd_price_after.text = idrCurrency(currentProduct.price!!.toDouble())
+        }
+        Picasso.get().load(APIClient.IMAGE_PATH + currentProduct.image).into(img_detail)
         val adapterDetail = DetailAdapter(details)
         adapterDetail.openLoadAnimation()
         // List Detail
@@ -109,12 +125,14 @@ class ProductDetailFragment : Fragment() {
         rv_detail_descr.Recycler()
     }
 
-    private fun dummyList(): MutableList<DetailItem> {
-        val dummies = mutableListOf<DetailItem>()
-        for (i in 1..10) {
-            dummies.add(DetailItem("This is key", resources.getString(R.string.descipt_txt)))
-        }
-        return dummies
+    private fun totalPrice(oriPrice: Double, diskon: Double): Double {
+        return (oriPrice - (oriPrice * (diskon / 100)))
+    }
+
+    private fun idrCurrency(number: Double): String {
+        val locale = Locale("in", "ID")
+        val numFor = NumberFormat.getCurrencyInstance(locale)
+        return numFor.format(number)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

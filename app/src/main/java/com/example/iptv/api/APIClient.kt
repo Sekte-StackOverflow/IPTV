@@ -28,4 +28,12 @@ class APIClient {
         return retrofit
     }
 
+    fun getAPIfromClient(): Retrofit {
+        retrofit = Retrofit.Builder()
+            .baseUrl("https://eyeplus.co.id/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        return retrofit
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.iptv.Models
 
 data class SosMed(
+    val id: Int,
     val facebook: String,
     val instagram: String,
     val linkedin: String,

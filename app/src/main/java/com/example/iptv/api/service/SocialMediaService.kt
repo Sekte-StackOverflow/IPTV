@@ -6,9 +6,9 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface SocialMediaService {
-    @GET("api/sosmed/json")
+    @GET("api/sosmed/jsons")
     fun getSocialMediaUrl(): Call<MutableList<SosMed>>
 
-    @GET("api/sosmed/json")
+    @GET("api/sosmed/jsons")
     fun getAllSocial(): Call<MutableList<SocialMedia>>
 }

@@ -1,10 +1,12 @@
 package com.example.iptv.Models
 
+import com.google.gson.annotations.SerializedName
+
 data class UserActivities(
-    val name: String,
-    val subscription: String,
-    val device: String,
-    val ipPublic: String,
-    val activities: String,
-    val date: String
+    @SerializedName("id")
+    val idMovie: String,
+    @SerializedName("activity")
+    val activity: String,
+    @SerializedName("iduser")
+    val userId: String
 )

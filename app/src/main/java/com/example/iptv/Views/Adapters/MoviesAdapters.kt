@@ -17,8 +17,15 @@ class MoviesAdapters(data: MutableList<Channel>?) :
         Picasso.get()
             .load(Uri.parse(url))
             .into(poster)
+        val viewTotal = item.views1 + item.views2
         helper.setText(R.id.movie_title, item?.name)
-            .setText(R.id.movie_views, "${item!!.views} Watching")
+            .setText(R.id.movie_views, "$viewTotal Watching")
             .setText(R.id.movie_status, item.status.toUpperCase())
+    }
+
+    fun updateView(position: Int) {
+        var tmp = data[position]
+        tmp.views1 = tmp.views1 + 1
+        data[position] = tmp
     }
 }
